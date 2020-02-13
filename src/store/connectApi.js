@@ -15,7 +15,7 @@ const mutations = {
 
   //LOGIN USER
   LOGIN_USER: async (state, res) => {
-    console.log(res);
+    // console.log(res);
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
     sessionStorage.setItem("jwt", res.data.token);
   }
