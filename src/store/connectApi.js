@@ -25,7 +25,7 @@ const actions = {
   //REGISTER NEW USER
   registerUser: async ({ commit }, newData) => {
     await axios
-      .post(`${process.env.VUE_APP_BASE_URL}/register`, newData)
+      .post(`${process.env.VUE_APP_API_URL}/register`, newData)
       .then(res => {
         commit("REGISTER_USER", res);
       });
@@ -34,7 +34,7 @@ const actions = {
   //LOGIN USER
   loginUser: async ({ commit }, newData) => {
     await axios
-      .post(`${process.env.VUE_APP_BASE_URL}/login`, newData)
+      .post(`${process.env.VUE_APP_API_URL}/login`, newData)
       .then(res => {
         commit("LOGIN_USER", res);
       });
