@@ -58,7 +58,6 @@ export default {
           this.newUser.password = "";
         })
         .catch(err => {
-          console.error(err.response);
           this.error.message = err.response.data.message;
         });
     }

@@ -19,12 +19,14 @@
           <router-link v-if="!isLoggedIn" to="/register">Register</router-link>
         </li>
         <li :class="{ 'mr-6': isLoggedIn }">
-          <button v-if="isLoggedIn" @click="logout" class="focus:outline-none">Logout</button>
+          <button v-if="isLoggedIn" @click="logout" class="focus:outline-none">
+            Logout
+          </button>
         </li>
       </ul>
       <p v-if="userDetails" class="text-gray-700 text-xs">
         Logged in as:
-        <span class="text-black font-black ml-1 p-1">{{userDetails}}</span>
+        <span class="text-black font-black ml-1 p-1">{{ userDetails }}</span>
       </p>
     </div>
   </div>
@@ -52,4 +54,3 @@ export default {
   }
 };
 </script>
-

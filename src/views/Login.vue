@@ -1,4 +1,4 @@
- <template>
+<template>
   <div>
     <TheLoginRegister
       :error="error"
@@ -9,7 +9,6 @@
     />
   </div>
 </template>
-
 
 <script>
 import TheLoginRegister from "@/components/TheLoginRegister";
@@ -59,7 +58,6 @@ export default {
           this.user.password = "";
         })
         .catch(err => {
-          console.error(err.response);
           if (
             err.response.data == "Unauthorized" ||
             err.response.data == "Bad Request"

@@ -1,20 +1,19 @@
-
 const state = () => {
   return {
     errorMessage: "",
     bannerMessage: "",
     singleGameArray: []
-  }
-}
+  };
+};
 
 const mutations = {
-  INIT_ARRAY: (state) => {
+  INIT_ARRAY: state => {
     //SET RETURNED ARRAY TO NEVER BE EQUAL TO NULL
-    const storedArray = JSON.parse(localStorage.getItem("betSlip"))
+    const storedArray = JSON.parse(localStorage.getItem("betSlip"));
     if (storedArray == null) {
-      state.singleGameArray = []
+      state.singleGameArray = [];
     } else {
-      state.singleGameArray = storedArray
+      state.singleGameArray = storedArray;
     }
   },
   SELECT_NUMBER: (state, number) => {
@@ -30,19 +29,18 @@ const mutations = {
         // NUMBER DOES NOT EXIST
         state.errorMessage = "";
         //INSERT NUMBER INTO ARRAY
-        let newArray = state.singleGameArray
+        let newArray = state.singleGameArray;
         newArray.push(number);
         //STRINGIFY ARRAY AND SEND TO LOCAL STORAGE
-        let betSlip = newArray
+        let betSlip = newArray;
         localStorage.setItem("betSlip", JSON.stringify(betSlip));
-        const storedArray = JSON.parse(localStorage.getItem("betSlip"))
-        state.singleGameArray = storedArray
+        const storedArray = JSON.parse(localStorage.getItem("betSlip"));
+        state.singleGameArray = storedArray;
       } else {
         // NUMBER DOES EXIST
         state.errorMessage = "You have already selected the number";
       }
     }
-
   },
   REMOVE_NUMBER: (state, pick) => {
     const index = state.singleGameArray.indexOf(pick);
@@ -54,39 +52,38 @@ const mutations = {
     localStorage.removeItem("betSlip");
     localStorage.setItem("betSlip", JSON.stringify(betSlip));
   },
-  PLAY_GAME: (state) => {
+  PLAY_GAME: state => {
     if (state.singleGameArray.length < 5) {
-      return state.errorMessage = "Select 5 numbers"
+      return (state.errorMessage = "Select 5 numbers");
     }
-    state.errorMessage = ""
-    state.bannerMessage = "NOT YET CONFIGURED"
-
+    state.errorMessage = "";
+    state.bannerMessage = "NOT YET CONFIGURED";
   },
-  CLEAR: (state) => {
+  CLEAR: state => {
     localStorage.removeItem("betSlip");
     state.singleGameArray = [];
     state.errorMessage = "";
     state.bannerMessage = "";
   }
-}
+};
 
 const actions = {
   initArray: ({ commit }) => {
-    commit("INIT_ARRAY")
+    commit("INIT_ARRAY");
   },
   selectNumber: ({ commit }, number) => {
-    commit("SELECT_NUMBER", number)
+    commit("SELECT_NUMBER", number);
   },
   removeNumber: ({ commit }, pick) => {
-    commit("REMOVE_NUMBER", pick)
+    commit("REMOVE_NUMBER", pick);
   },
   playGame: ({ commit }) => {
-    commit("PLAY_GAME")
+    commit("PLAY_GAME");
   },
   clear: ({ commit }) => {
-    commit("CLEAR")
+    commit("CLEAR");
   }
-}
+};
 
 const getters = {
   errorMessage: state => {
@@ -98,7 +95,7 @@ const getters = {
   singleGameArray: state => {
     return state.singleGameArray;
   }
-}
+};
 
 export default {
   state,
@@ -106,4 +103,3 @@ export default {
   mutations,
   getters
 };
-
