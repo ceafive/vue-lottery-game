@@ -15,9 +15,9 @@ module.exports = {
       ]
     }),
     process.env.NODE_ENV === "production" &&
-      require("@fullhuman/postcss-purgecss")({
-        content: ["./public/*html", "./src/*.vue", "./src/components/*.vue"],
-        defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-      })
+    require("@fullhuman/postcss-purgecss")({
+      content: ["./public/*html", "./src/*.vue", "./src/components/*.vue", "./src/views/*.vue"],
+      defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+    })
   ]
 };
