@@ -1,0 +1,67 @@
+<template>
+  <div>
+    <TheLoginRegister
+      :error="error"
+      :noError="noError"
+      :user="newUser"
+      :submit="register"
+      :enter="enter"
+    />
+  </div>
+</template>
+
+<script>
+import TheLoginRegister from "@/components/TheLoginRegister";
+export default {
+  name: "Register",
+  components: {
+    TheLoginRegister
+  },
+  data() {
+    return {
+      error: {
+        message: "Please enter username and password"
+      },
+      newUser: {
+        username: "",
+        password: ""
+      },
+      enter: "Register"
+    };
+  },
+  computed: {
+    noError() {
+      if (
+        this.newUser.username.length >= 4 &&
+        this.newUser.password.length >= 4 &&
+        this.error.message == "Please enter username and password"
+      ) {
+        return true;
+      }
+      return false;
+    }
+  },
+  methods: {
+    register() {
+      this.$store
+        .dispatch("registerUser", this.newUser)
+        .then(() => {
+          this.$store.dispatch("authCheck");
+          if (this.$store.getters.isLoggedIn) {
+            this.$router.push("/");
+          } else {
+            this.$router.push("/register");
+          }
+        })
+        .then(() => {
+          this.newUser.username = "";
+          this.newUser.password = "";
+        })
+        .catch(err => {
+          console.error(err.response);
+          this.error.message = err.response.data.message;
+        });
+    }
+  }
+};
+</script>
