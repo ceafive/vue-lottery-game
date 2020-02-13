@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container mx-auto font-body h-screen">
-    <Navbar />
+    <TheNavbar />
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar";
+import TheNavbar from "@/components/TheNavbar";
 
 export default {
   name: "App",
   components: {
-    Navbar
+    TheNavbar
   },
 
   mounted() {
@@ -22,3 +22,19 @@ export default {
   }
 };
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+a.router-link-exact-active {
+  color: #42b983;
+}
+</style>
