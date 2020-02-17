@@ -41,7 +41,11 @@ export default {
       return false;
     },
     enter() {
-      return this.enterMessage;
+      if (this.$store.getters.enterMessage !== "") {
+        return this.$store.getters.enterMessage;
+      } else {
+        return this.enterMessage;
+      }
     }
   },
   methods: {
@@ -49,7 +53,6 @@ export default {
       this.$store
         .dispatch("loginUser", this.user)
         .then(() => {
-          this.enterMessage = "Logging In....";
           this.$store.dispatch("authCheck");
           if (this.$store.getters.isLoggedIn) {
             this.$router.push("/");

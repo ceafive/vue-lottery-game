@@ -2,7 +2,8 @@ import axios from "axios";
 
 const state = () => {
   return {
-    token: null
+    token: null,
+    enterMessage: ""
   };
 };
 
@@ -23,7 +24,8 @@ const mutations = {
 
 const actions = {
   //REGISTER NEW USER
-  registerUser: async ({ commit }, newData) => {
+  registerUser: async ({ commit, state }, newData) => {
+    state.enterMessage = "Registering...."
     await axios
       .post(`${process.env.VUE_APP_API_URL}/register`, newData)
       .then(res => {
@@ -32,7 +34,8 @@ const actions = {
   },
 
   //LOGIN USER
-  loginUser: async ({ commit }, newData) => {
+  loginUser: async ({ commit, state }, newData) => {
+    state.enterMessage = "Logging In...."
     await axios
       .post(`${process.env.VUE_APP_API_URL}/login`, newData)
       .then(res => {
@@ -51,6 +54,9 @@ const actions = {
 const getters = {
   token: state => {
     return state.token;
+  },
+  enterMessage: state => {
+    return state.enterMessage;
   }
 };
 

@@ -41,7 +41,11 @@ export default {
       return false;
     },
     enter() {
-      return this.enterMessage;
+      if (this.$store.getters.enterMessage !== "") {
+        return this.$store.getters.enterMessage;
+      } else {
+        return this.enterMessage;
+      }
     }
   },
   methods: {
