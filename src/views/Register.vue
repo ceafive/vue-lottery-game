@@ -26,7 +26,7 @@ export default {
         username: "",
         password: ""
       },
-      enter: "Register"
+      enterMessage: "Register"
     };
   },
   computed: {
@@ -39,6 +39,9 @@ export default {
         return true;
       }
       return false;
+    },
+    enter() {
+      return this.enterMessage;
     }
   },
   methods: {
@@ -46,6 +49,7 @@ export default {
       this.$store
         .dispatch("registerUser", this.newUser)
         .then(() => {
+          this.enterMessage = "Registering...";
           this.$store.dispatch("authCheck");
           if (this.$store.getters.isLoggedIn) {
             this.$router.push("/");

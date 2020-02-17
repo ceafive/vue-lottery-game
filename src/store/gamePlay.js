@@ -54,7 +54,7 @@ const mutations = {
   },
   PLAY_GAME: state => {
     if (state.singleGameArray.length < 5) {
-      return (state.errorMessage = "Select 5 numbers");
+      return state.errorMessage = "Select 5 numbers";
     }
     state.errorMessage = "";
     state.bannerMessage = "NOT YET CONFIGURED";
