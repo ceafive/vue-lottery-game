@@ -49,7 +49,7 @@ export default {
       this.$store
         .dispatch("loginUser", this.user)
         .then(() => {
-          this.enterMessage = "Loading";
+          this.enterMessage = "Logging In....";
           this.$store.dispatch("authCheck");
           if (this.$store.getters.isLoggedIn) {
             this.$router.push("/");
