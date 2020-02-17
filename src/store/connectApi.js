@@ -9,23 +9,31 @@ const state = () => {
 
 const mutations = {
   //REGISTER NEW USER
-  REGISTER_USER: async (state, res) => {
+  REGISTER_USER: (state, res) => {
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
     sessionStorage.setItem("jwt", res.data.token);
+    state.enterMessage = "";
   },
 
   //LOGIN USER
-  LOGIN_USER: async (state, res) => {
+  LOGIN_USER: (state, res) => {
     // console.log(res);
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
     sessionStorage.setItem("jwt", res.data.token);
+    state.enterMessage = "";
+  },
+
+  //LOGOUT USER
+  LOGOUT_USER: () => {
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("jwt");
   }
 };
 
 const actions = {
   //REGISTER NEW USER
   registerUser: async ({ commit, state }, newData) => {
-    state.enterMessage = "Registering...."
+    state.enterMessage = "Registering....";
     await axios
       .post(`${process.env.VUE_APP_API_URL}/register`, newData)
       .then(res => {
@@ -35,7 +43,7 @@ const actions = {
 
   //LOGIN USER
   loginUser: async ({ commit, state }, newData) => {
-    state.enterMessage = "Logging In...."
+    state.enterMessage = "Logging In....";
     await axios
       .post(`${process.env.VUE_APP_API_URL}/login`, newData)
       .then(res => {
@@ -44,9 +52,8 @@ const actions = {
   },
 
   //LOGOUT USER
-  logout: ({ dispatch }) => {
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("jwt");
+  logout: ({ dispatch, commit }) => {
+    commit("LOGOUT_USER")
     dispatch("authCheck");
   }
 };

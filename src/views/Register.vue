@@ -66,6 +66,7 @@ export default {
           this.newUser.password = "";
         })
         .catch(err => {
+          this.enterMessage = "Register";
           this.error.message = err.response.data.message;
         });
     }

@@ -69,6 +69,7 @@ export default {
             err.response.data == "Unauthorized" ||
             err.response.data == "Bad Request"
           ) {
+            this.enterMessage = "Login";
             this.error.message = "Username or password not valid";
           }
         });
