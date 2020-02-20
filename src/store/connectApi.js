@@ -3,21 +3,14 @@ import axios from "axios";
 const state = () => {
   return {
     token: null,
-    enterMessage: ""
+    enterMessage: "",
+    error: "Please enter username and password"
   };
 };
 
 const mutations = {
-  //REGISTER NEW USER
-  REGISTER_USER: (state, res) => {
-    sessionStorage.setItem("user", JSON.stringify(res.data.user));
-    sessionStorage.setItem("jwt", res.data.token);
-    state.enterMessage = "";
-  },
-
-  //LOGIN USER
-  LOGIN_USER: (state, res) => {
-    // console.log(res);
+  //REGISTER/LOGIN NEW USER
+  SIGN_USER: (state, res) => {
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
     sessionStorage.setItem("jwt", res.data.token);
     state.enterMessage = "";
@@ -31,29 +24,26 @@ const mutations = {
 };
 
 const actions = {
-  //REGISTER NEW USER
-  registerUser: async ({ commit, state }, newData) => {
-    state.enterMessage = "Registering....";
-    await axios
-      .post(`${process.env.VUE_APP_API_URL}/register`, newData)
+  //SIGN USER
+  signUser: async ({ commit, state }, newData) => {
+    let action = "";
+    if (newData.action === "login") {
+      action = "login";
+      state.enterMessage = "Logging In..";
+    } else {
+      action = "register";
+      state.enterMessage = "Registering..";
+    }
+    return await axios
+      .post(`/${action}`, newData.user)
       .then(res => {
-        commit("REGISTER_USER", res);
-      });
-  },
-
-  //LOGIN USER
-  loginUser: async ({ commit, state }, newData) => {
-    state.enterMessage = "Logging In....";
-    await axios
-      .post(`${process.env.VUE_APP_API_URL}/login`, newData)
-      .then(res => {
-        commit("LOGIN_USER", res);
+        commit("SIGN_USER", res);
       });
   },
 
   //LOGOUT USER
   logout: ({ dispatch, commit }) => {
-    commit("LOGOUT_USER")
+    commit("LOGOUT_USER");
     dispatch("authCheck");
   }
 };
@@ -64,6 +54,9 @@ const getters = {
   },
   enterMessage: state => {
     return state.enterMessage;
+  },
+  error: state => {
+    return state.error;
   }
 };
 

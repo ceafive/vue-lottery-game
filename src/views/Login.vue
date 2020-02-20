@@ -19,9 +19,7 @@ export default {
   },
   data() {
     return {
-      error: {
-        message: "Please enter username and password"
-      },
+      error: this.$store.getters.error,
       user: {
         username: "",
         password: ""
@@ -34,24 +32,28 @@ export default {
       if (
         this.user.username.length >= 4 &&
         this.user.password.length >= 4 &&
-        this.error.message == "Please enter username and password"
+        this.error === "Please enter username and password"
       ) {
         return true;
       }
       return false;
     },
     enter() {
-      if (this.$store.getters.enterMessage !== "") {
+      if (
+        this.$store.getters.enterMessage !== "" &&
+        this.error === "Please enter username and password"
+      ) {
         return this.$store.getters.enterMessage;
-      } else {
+      } else if (this.error === "Username or password not valid") {
         return this.enterMessage;
       }
+      return this.enterMessage;
     }
   },
   methods: {
     login() {
       this.$store
-        .dispatch("loginUser", this.user)
+        .dispatch("signUser", { user: this.user, action: "login" })
         .then(() => {
           this.$store.dispatch("authCheck");
           if (this.$store.getters.isLoggedIn) {
@@ -69,8 +71,7 @@ export default {
             err.response.data == "Unauthorized" ||
             err.response.data == "Bad Request"
           ) {
-            this.enterMessage = "Login";
-            this.error.message = "Username or password not valid";
+            this.error = "Username or password not valid";
           }
         });
     }

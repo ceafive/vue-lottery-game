@@ -19,9 +19,7 @@ export default {
   },
   data() {
     return {
-      error: {
-        message: "Please enter username and password"
-      },
+      error: "Please enter username and password",
       newUser: {
         username: "",
         password: ""
@@ -34,24 +32,28 @@ export default {
       if (
         this.newUser.username.length >= 4 &&
         this.newUser.password.length >= 4 &&
-        this.error.message == "Please enter username and password"
+        this.error == "Please enter username and password"
       ) {
         return true;
       }
       return false;
     },
     enter() {
-      if (this.$store.getters.enterMessage !== "") {
+      if (
+        this.$store.getters.enterMessage !== "" &&
+        this.error === "Please enter username and password"
+      ) {
         return this.$store.getters.enterMessage;
-      } else {
+      } else if (this.error !== "Please enter username and password") {
         return this.enterMessage;
       }
+      return this.enterMessage;
     }
   },
   methods: {
     register() {
       this.$store
-        .dispatch("registerUser", this.newUser)
+        .dispatch("signUser", { user: this.newUser, action: "register" })
         .then(() => {
           this.enterMessage = "Registering...";
           this.$store.dispatch("authCheck");
@@ -66,8 +68,7 @@ export default {
           this.newUser.password = "";
         })
         .catch(err => {
-          this.enterMessage = "Register";
-          this.error.message = err.response.data.message;
+          this.error = err.response.data.message;
         });
     }
   }

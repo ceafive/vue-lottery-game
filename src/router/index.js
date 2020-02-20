@@ -66,9 +66,9 @@ const routes = [
   },
   {
     path: "*",
-    name: "home",
+    name: "all",
     component: Home
-  },
+  }
 ];
 
 const router = new VueRouter({

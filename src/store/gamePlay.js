@@ -34,8 +34,6 @@ const mutations = {
         //STRINGIFY ARRAY AND SEND TO LOCAL STORAGE
         let betSlip = newArray;
         localStorage.setItem("betSlip", JSON.stringify(betSlip));
-        const storedArray = JSON.parse(localStorage.getItem("betSlip"));
-        state.singleGameArray = storedArray;
       } else {
         // NUMBER DOES EXIST
         state.errorMessage = "You have already selected the number";
