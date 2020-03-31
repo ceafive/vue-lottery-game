@@ -5,12 +5,13 @@
       :noError="noError"
       :user="user"
       :submit="login"
-      :enter="enter"
+      :enter="enter.login"
     />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import TheLoginRegister from "@/components/TheLoginRegister";
 export default {
   name: "Login",
@@ -19,61 +20,30 @@ export default {
   },
   data() {
     return {
-      error: this.$store.getters.error,
       user: {
         username: "",
         password: ""
-      },
-      enterMessage: "Login"
+      }
     };
   },
   computed: {
+    ...mapGetters(["isLoggedIn", "error", "enter"]),
     noError() {
-      if (
-        this.user.username.length >= 4 &&
-        this.user.password.length >= 4 &&
-        this.error === "Please enter username and password"
-      ) {
+      if (this.user.username.length >= 4 && this.user.password.length >= 4)
         return true;
-      }
       return false;
-    },
-    enter() {
-      if (
-        this.$store.getters.enterMessage !== "" &&
-        this.error === "Please enter username and password"
-      ) {
-        return this.$store.getters.enterMessage;
-      } else if (this.error === "Username or password not valid") {
-        return this.enterMessage;
-      }
-      return this.enterMessage;
     }
   },
   methods: {
-    login() {
-      this.$store
-        .dispatch("signUser", { user: this.user, action: "login" })
-        .then(() => {
-          this.$store.dispatch("authCheck");
-          if (this.$store.getters.isLoggedIn) {
-            this.$router.push("/");
-          } else {
-            this.$router.push("/login");
-          }
-        })
-        .then(() => {
-          this.user.username = "";
-          this.user.password = "";
-        })
-        .catch(err => {
-          if (
-            err.response.data == "Unauthorized" ||
-            err.response.data == "Bad Request"
-          ) {
-            this.error = "Username or password not valid";
-          }
-        });
+    ...mapActions(["authenticateUser"]),
+    async login() {
+      await this.authenticateUser({
+        user: this.user,
+        action: "login"
+      });
+      this.user.username = "";
+      this.user.password = "";
+      if (this.isLoggedIn) this.$router.push("/");
     }
   }
 };

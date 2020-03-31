@@ -3,7 +3,7 @@ import axios from "axios";
 const state = () => {
   return {
     token: null,
-    enterMessage: "",
+    enter: { login: "Login", register: "Register" },
     error: "Please enter username and password"
   };
 };
@@ -13,9 +13,13 @@ const mutations = {
   SIGN_USER: (state, res) => {
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
     sessionStorage.setItem("jwt", res.data.token);
-    state.enterMessage = "";
   },
-
+  //HANDLE LOGIN/SIGN UP ERRORS
+  ERROR_HANDLING: (state, error) => {
+    if (error === "Unauthorized" || error === "Bad Request")
+      state.error = "Username or password invalid";
+    if (error.name === "UserExistsError") state.error = error.message;
+  },
   //LOGOUT USER
   LOGOUT_USER: () => {
     sessionStorage.removeItem("user");
@@ -24,27 +28,21 @@ const mutations = {
 };
 
 const actions = {
-  //SIGN USER
-  signUser: async ({ commit, state }, newData) => {
-    let action = "";
-    if (newData.action === "login") {
-      action = "login";
-      state.enterMessage = "Logging In..";
-    } else {
-      action = "register";
-      state.enterMessage = "Registering..";
+  //AUTHENTICATE USER
+  authenticateUser: async ({ commit }, { user, action }) => {
+    try {
+      const res = await axios.post(`/${action}`, user);
+      await commit("SIGN_USER", res);
+      await commit("AUTH_CHECK");
+    } catch (err) {
+      const error = err.response.data;
+      commit("ERROR_HANDLING", error);
     }
-    return await axios
-      .post(`/${action}`, newData.user)
-      .then(res => {
-        commit("SIGN_USER", res);
-      });
   },
-
   //LOGOUT USER
-  logout: ({ dispatch, commit }) => {
+  logout: ({ commit }) => {
     commit("LOGOUT_USER");
-    dispatch("authCheck");
+    commit("AUTH_CHECK");
   }
 };
 
@@ -52,8 +50,8 @@ const getters = {
   token: state => {
     return state.token;
   },
-  enterMessage: state => {
-    return state.enterMessage;
+  enter: state => {
+    return state.enter;
   },
   error: state => {
     return state.error;

@@ -8,19 +8,13 @@ const state = () => {
 const mutations = {
   AUTH_CHECK: state => {
     state.token = sessionStorage.getItem("jwt");
-    if (state.token != null || state.token != undefined) {
+    if (state.token) {
       state.isLoggedIn = true;
       state.userDetails = JSON.parse(sessionStorage.getItem("user"));
-      return;
+    } else {
+      state.isLoggedIn = false;
+      state.userDetails = "";
     }
-    state.isLoggedIn = false;
-    state.userDetails = "";
-  }
-};
-
-const actions = {
-  authCheck: ({ commit }) => {
-    commit("AUTH_CHECK");
   }
 };
 
@@ -35,7 +29,6 @@ const getters = {
 
 export default {
   state,
-  actions,
   mutations,
   getters
 };

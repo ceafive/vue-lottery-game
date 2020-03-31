@@ -2,7 +2,7 @@ const state = () => {
   return {
     errorMessage: "",
     bannerMessage: "",
-    singleGameArray: []
+    picks: []
   };
 };
 
@@ -11,25 +11,25 @@ const mutations = {
     //SET RETURNED ARRAY TO NEVER BE EQUAL TO NULL
     const storedArray = JSON.parse(localStorage.getItem("betSlip"));
     if (storedArray == null) {
-      state.singleGameArray = [];
+      state.picks = [];
     } else {
-      state.singleGameArray = storedArray;
+      state.picks = storedArray;
     }
   },
   SELECT_NUMBER: (state, number) => {
     //IF ARRAY LENGTH IS GREATER THAN 5
-    if (state.singleGameArray.length >= 5) {
+    if (state.picks.length >= 5) {
       state.errorMessage = "You have selected 5 numbers, play now";
     }
     //IF ARRAY LENGTH IS LESS THAN 5
     else {
       //CHECK IF PICK ALREADY EXISTS IN ARRAY
-      const index = state.singleGameArray.indexOf(number);
-      if (typeof state.singleGameArray[index] == "undefined") {
+      const index = state.picks.indexOf(number);
+      if (typeof state.picks[index] == "undefined") {
         // NUMBER DOES NOT EXIST
         state.errorMessage = "";
         //INSERT NUMBER INTO ARRAY
-        let newArray = state.singleGameArray;
+        let newArray = state.picks;
         newArray.push(number);
         //STRINGIFY ARRAY AND SEND TO LOCAL STORAGE
         let betSlip = newArray;
@@ -41,17 +41,17 @@ const mutations = {
     }
   },
   REMOVE_NUMBER: (state, pick) => {
-    const index = state.singleGameArray.indexOf(pick);
-    state.singleGameArray.splice(index, 1);
-    if (state.singleGameArray.length < 5) {
+    const index = state.picks.indexOf(pick);
+    state.picks.splice(index, 1);
+    if (state.picks.length < 5) {
       state.errorMessage = "";
     }
-    let betSlip = state.singleGameArray;
+    let betSlip = state.picks;
     localStorage.removeItem("betSlip");
     localStorage.setItem("betSlip", JSON.stringify(betSlip));
   },
   PLAY_GAME: state => {
-    if (state.singleGameArray.length < 5) {
+    if (state.picks.length < 5) {
       return (state.errorMessage = "Select 5 numbers");
     }
     state.errorMessage = "";
@@ -59,27 +59,9 @@ const mutations = {
   },
   CLEAR: state => {
     localStorage.removeItem("betSlip");
-    state.singleGameArray = [];
+    state.picks = [];
     state.errorMessage = "";
     state.bannerMessage = "";
-  }
-};
-
-const actions = {
-  initArray: ({ commit }) => {
-    commit("INIT_ARRAY");
-  },
-  selectNumber: ({ commit }, number) => {
-    commit("SELECT_NUMBER", number);
-  },
-  removeNumber: ({ commit }, pick) => {
-    commit("REMOVE_NUMBER", pick);
-  },
-  playGame: ({ commit }) => {
-    commit("PLAY_GAME");
-  },
-  clear: ({ commit }) => {
-    commit("CLEAR");
   }
 };
 
@@ -90,14 +72,13 @@ const getters = {
   bannerMessage: state => {
     return state.bannerMessage;
   },
-  singleGameArray: state => {
-    return state.singleGameArray;
+  picks: state => {
+    return state.picks;
   }
 };
 
 export default {
   state,
-  actions,
   mutations,
   getters
 };

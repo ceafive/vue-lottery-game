@@ -17,8 +17,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("authCheck");
-    this.$store.dispatch("initArray");
+    this.$store.commit("AUTH_CHECK");
+    this.$store.commit("INIT_ARRAY");
   }
 };
 </script>
